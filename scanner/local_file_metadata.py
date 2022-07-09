@@ -55,18 +55,21 @@ class LocalFileMetadata:
     def asdict(self):
         return asdict(self)
 
-    def compute_md5(self) -> None:
-        if not self.path.is_file():
-            self.md5 = "NA"
-            return
-        h = md5()
-        with self.path.open("rb") as fin:
-            while data := fin.read(BLOCK_SIZE):
-                h.update(data)
-        self.md5 = h.hexdigest()
+    def set_md5_from_contents(self) -> None:
+        self.md5 = compute_md5(self.path)
 
 
 def scan(starting_dir: PathType) -> Iterator[LocalFileMetadata]:
     top = Path(starting_dir)
     for p in top.glob("**/*"):
         yield LocalFileMetadata.from_path(p)
+
+
+def compute_md5(path: Path) -> str:
+    if not path.is_file():
+        return "NA"
+    h = md5()
+    with path.open("rb") as fin:
+        while data := fin.read(BLOCK_SIZE):
+            h.update(data)
+    return h.hexdigest()
