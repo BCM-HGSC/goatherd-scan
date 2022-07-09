@@ -9,7 +9,6 @@ from hashlib import md5
 from os import PathLike
 from pathlib import Path
 from pwd import getpwuid
-from queue import Empty
 from stat import filemode
 from typing import Iterator, Union
 
