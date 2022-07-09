@@ -30,6 +30,10 @@ class LocalFileMetadata:
     md5: str = None
 
     @classmethod
+    def field_names(cls):
+        return tuple(f.name for f in fields(cls))
+
+    @classmethod
     def from_path(cls, p: Path):
         s = p.stat(follow_symlinks=False)
         result = cls(
