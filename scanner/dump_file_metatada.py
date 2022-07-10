@@ -1,7 +1,6 @@
 from multiprocessing import Process, Queue
 from pathlib import Path
 from queue import Empty
-from sys import argv
 
 from .local_file_metadata import LocalFileMetadata, scan
 
