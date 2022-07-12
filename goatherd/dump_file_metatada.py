@@ -1,4 +1,4 @@
-from multiprocessing import Process, Queue
+from multiprocessing import Process, Queue, set_start_method
 from os import getpid
 from pathlib import Path
 from queue import Empty
@@ -9,7 +9,8 @@ from .local_file_metadata import compute_md5, LocalFileMetadata, scan
 
 
 def run(start_dir_path: Path) -> None:
-    engine = TaskEngine(run_worker, handle_results, 1)
+    set_start_method("spawn")
+    engine = TaskEngine(run_worker, handle_results, 4)
     engine.start()
     for r in scan(start_dir_path):
         engine.post_task(r)
@@ -112,6 +113,7 @@ class TaskEngine:
 
 
 def err(*args, **kwargs) -> None:
+    return
     print(*args, file=stderr, **kwargs)
 
-err("finished loading", __file__)
+# err("finished loading", __file__)
